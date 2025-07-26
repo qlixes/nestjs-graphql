@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { MercuriusDriver, MercuriusDriverConfig } from '@nestjs/mercurius';
+import { DateScalar } from './scalars/datetime.scalar';
 
 @Module({
-    imports: [UserModule],
-    controllers: [AppController],
-    providers: [AppService],
+    providers: [DateScalar],
+    imports: [
+        GraphQLModule.forRoot<MercuriusDriverConfig>({
+            driver: MercuriusDriver,
+            graphiql: false,
+            subscription: true,
+            autoSchemaFile: "schema.gql",
+        }),
+    ],
 })
 export class AppModule { }
