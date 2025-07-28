@@ -1,17 +1,21 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MercuriusDriver, MercuriusDriverConfig } from '@nestjs/mercurius';
-import { DateScalar } from './scalars/datetime.scalar';
+import { UserModule } from './user/user.module';
+import { Date, DateTime } from 'graphql-scalars/typings/typeDefs';
+import { PrismaService } from 'prisma.service';
 
 @Module({
-    providers: [DateScalar],
+    providers: [PrismaService],
     imports: [
         GraphQLModule.forRoot<MercuriusDriverConfig>({
             driver: MercuriusDriver,
-            graphiql: false,
+            graphiql: true,
             subscription: true,
             autoSchemaFile: "schema.gql",
         }),
+        UserModule,
     ],
+    exports: [PrismaService],
 })
 export class AppModule { }
